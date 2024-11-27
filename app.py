@@ -160,6 +160,7 @@ def index():
     data = []  # Stores query results
     error_message = None
     success_message = None
+    selected_query = None  # Initialize selected_query to avoid UnboundLocalError
 
     # Predefined queries
     predefined_queries = {
@@ -180,8 +181,6 @@ def index():
     "Vendor supplying 'Cup' (lowest price)": "SELECT v.VendorID, v.Name AS VendorName FROM Vendor v JOIN VendorPart vp ON v.VendorID = vp.VendorID JOIN Part p ON vp.PartID = p.PartID WHERE p.PartName = 'Cup' AND p.Weight < 4 AND vp.Price = (SELECT MIN(vp2.Price) FROM VendorPart vp2 JOIN Part p2 ON vp2.PartID = p2.PartID WHERE p2.PartName = 'Cup' AND p2.Weight < 4);"
 }
 
-
-    # Handle POST requests
     if request.method == "POST":
         action = request.form["action"]
 
@@ -195,12 +194,10 @@ def index():
             success_message = "Connected to the database."
 
         elif action == "disconnect":
-            # Clear session data to log out
             session.clear()
             success_message = "Disconnected from the database."
 
         elif action == "show_tables":
-            # Fetch and display tables along with their data
             try:
                 connection = get_connection()
                 cursor = connection.cursor()
@@ -208,7 +205,7 @@ def index():
                 tables = cursor.fetchall()
                 for table in tables:
                     table_name = table[0]
-                    cursor.execute(f"SELECT * FROM `{table_name}` LIMIT 5")  # Show up to 5 records per table
+                    cursor.execute(f"SELECT * FROM `{table_name}` LIMIT 5")
                     rows = cursor.fetchall()
                     columns = [desc[0] for desc in cursor.description]
                     data.append({"table_name": table_name, "columns": columns, "rows": rows})
@@ -221,7 +218,6 @@ def index():
                     connection.close()
 
         elif action == "reset":
-            # Reset and reinsert data
             try:
                 connection = get_connection()
                 cursor = connection.cursor()
@@ -240,25 +236,18 @@ def index():
                     connection.close()
 
         elif action == "execute_query":
-            # Execute the selected query
+            selected_query = request.form.get("query")  # Get the selected query
             try:
                 connection = get_connection()
                 cursor = connection.cursor()
-                selected_query = request.form.get("query")  # Get the selected query from the dropdown
-                if selected_query and selected_query in predefined_queries:
-                    query = predefined_queries[selected_query]
-                    cursor.execute(query)
-                    query_results = cursor.fetchall()
-                    columns = [desc[0] for desc in cursor.description]
-                    log_query(query, query_results)  # Log the query and results
-                    if query_results:
-                        data = [{"columns": columns, "rows": query_results}]
-                    else:
-                        data = [{"columns": columns, "rows": [["No records found."]]}]
-                    success_message = "Query executed successfully."
-                else:
-                    error_message = "Invalid query selected."
+                query = predefined_queries[selected_query]
+                cursor.execute(query)
+                query_results = cursor.fetchall()
+                columns = [desc[0] for desc in cursor.description]
+                log_query(query, query_results)
+                data = [{"columns": columns, "rows": query_results}]
                 cursor.close()
+                success_message = "Query executed successfully."
             except mysql.connector.Error as err:
                 error_message = f"Error executing query: {err}"
             finally:
@@ -269,17 +258,7 @@ def index():
         "index.html",
         data=data,
         predefined_queries=predefined_queries,
-        selected_query=selected_query,  # Pass the selected query back to the template
-        error_message=error_message,
-        success_message=success_message,
-        connected=("host" in session),
-    )
-
-
-    return render_template(
-        "index.html",
-        data=data,
-        predefined_queries=predefined_queries,
+        selected_query=selected_query,  # Pass selected query to template
         error_message=error_message,
         success_message=success_message,
         connected=("host" in session),
