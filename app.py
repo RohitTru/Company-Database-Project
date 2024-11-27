@@ -244,7 +244,7 @@ def index():
             try:
                 connection = get_connection()
                 cursor = connection.cursor()
-                selected_query = request.form.get("query")
+                selected_query = request.form.get("query")  # Get the selected query from the dropdown
                 if selected_query and selected_query in predefined_queries:
                     query = predefined_queries[selected_query]
                     cursor.execute(query)
@@ -264,6 +264,17 @@ def index():
             finally:
                 if "connection" in locals() and connection.is_connected():
                     connection.close()
+
+    return render_template(
+        "index.html",
+        data=data,
+        predefined_queries=predefined_queries,
+        selected_query=selected_query,  # Pass the selected query back to the template
+        error_message=error_message,
+        success_message=success_message,
+        connected=("host" in session),
+    )
+
 
     return render_template(
         "index.html",

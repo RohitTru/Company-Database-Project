@@ -62,7 +62,9 @@
             <label for="query">Select Query:</label>
             <select id="query" name="query">
                 {% for query_name, query_sql in predefined_queries.items() %}
-                    <option value="{{ query_name }}">{{ query_name }}</option>
+                    <option value="{{ query_name }}" {% if query_name == selected_query %}selected{% endif %}>
+                        {{ query_name }}
+                    </option>
                 {% endfor %}
             </select>
             <button type="submit" name="action" value="execute_query">Execute Query</button>
