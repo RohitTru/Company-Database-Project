@@ -133,10 +133,10 @@ INSERT INTO Vendor (VendorID, Name, AddressLine1, AddressLine2, City, State, Zip
 (1, 'ABC Supplies', '101 First Ave', '', 'Houston', 'TX', 77001, '12345', 8, 'http://abc-supplies.com'),
 (2, 'XYZ Manufacturing', '202 Second Ave', '', 'Austin', 'TX', 78701, '67890', 9, 'http://xyz-manufacturing.com');
 
-INSERT INTO Part (PartID, ProductID, Quantity) VALUES
-(1, 1, 50),
-(2, 2, 100),
-(3, 3, 20); -- Part for testing profit
+INSERT INTO Part (PartID, ProductID, Quantity, PartName, Weight) VALUES
+(1, 1, 50, 'Cup', 3.5),  
+(2, 2, 100, 'Bowl', 5.0), 
+(3, 3, 20, 'Plate', 2.0);
 
 INSERT INTO VendorPart (VendorID, PartID, Price) VALUES
 (1, 1, 25.00),
