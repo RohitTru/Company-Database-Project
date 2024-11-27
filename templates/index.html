@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f4f4f4;
+            text-align: left;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Database Viewer</h1>
+    <form method="POST">
+        {% if not connected %}
+            <!-- Connection Form -->
+            <label for="host">Host:</label>
+            <input type="text" id="host" name="host" placeholder="127.0.0.1" required><br><br>
+            
+            <label for="port">Port:</label>
+            <input type="text" id="port" name="port" placeholder="3306" required><br><br>
+            
+            <label for="user">User:</label>
+            <input type="text" id="user" name="user" placeholder="root" required><br><br>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
+            
+            <label for="database">Database:</label>
+            <input type="text" id="database" name="database" required><br><br>
+            
+            <button type="submit" name="action" value="connect">Connect</button>
+        {% else %}
+            <!-- Connected Actions -->
+            <button type="submit" name="action" value="disconnect">Disconnect</button>
+            <button type="submit" name="action" value="show_tables">Show Tables</button>
+            <button type="submit" name="action" value="reset">Reset Database</button>
+            
+            <label for="query">Select Query:</label>
+            <select id="query" name="query">
+                {% for query_name, query_sql in predefined_queries.items() %}
+                    <option value="{{ query_name }}">{{ query_name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" name="action" value="execute_query">Execute Query</button>
+        {% endif %}
+    </form>
+
+    <!-- Error or Success Messages -->
+    {% if error_message %}
+        <p class="error">{{ error_message }}</p>
+    {% endif %}
+    {% if success_message %}
+        <p class="success">{{ success_message }}</p>
+    {% endif %}
+
+    <!-- Display Tables and Data -->
+    {% if data %}
+        <h2>Tables and Data:</h2>
+        {% for table in data %}
+            <h3>Table: {{ table.table_name }}</h3>
+            <table>
+                <thead>
+                    <tr>
+                        {% for column in table.columns %}
+                            <th>{{ column }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in table.rows %}
+                        <tr>
+                            {% for col in row %}
+                                <td>{{ col }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    {% else %}
+        <p>No data to display. Use the "Show Tables" button to load table data.</p>
+    {% endif %}
+</body>
+</html>

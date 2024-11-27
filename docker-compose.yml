@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  flask-app:
+    build: .
+    ports:
+      - "5001:5000"  # Maps the container's internal port 5000 to host's port 5001
+    expose:
+      - "5000"  # Makes port 5000 accessible within the internal Docker network
+    restart: unless-stopped
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token eyJhIjoiNmVhZmRlYzA5ZjExOGM4OWZhNDNlNmVhOWY1YTllYjkiLCJ0IjoiZTQ2ZjE4NWEtZWQ5NC00M2YwLWE3ZTktOTM4ZjU3ZmE3ZDJmIiwicyI6Ik16SXlOalE0WTJVdFptWTRNaTAwWmpJeUxUZ3dZV0V0WXprNE1HVmhNelV3Tm1ZMiJ9
+    depends_on:
+      - flask-app  # Ensures the Flask app is started before Cloudflared
+    environment:
+      TUNNEL_HOSTNAME: "mergex.emerginary.com"
+      TUNNEL_SERVICE: "http://flask-app:5000"  # Points to the Flask app's internal service
+    restart: unless-stopped
