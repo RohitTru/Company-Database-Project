@@ -82,18 +82,27 @@ INSERT INTO PreferredSalesperson (CustomerID, SalesPersonID) VALUES
 
 INSERT INTO EmployeeDepartmentAssignment (EmployeeID, DepartmentID, StartTime, EndTime) VALUES
 (1, 1, '2023-01-01 08:00:00', '2023-12-31 17:00:00'),
-(3, 3, '2023-06-01 09:00:00', '2023-12-31 18:00:00'),
-(202, 2, '2023-01-01 08:00:00', '2023-12-31 17:00:00'); -- Employee working in all departments
+(1, 2, '2023-01-01 08:00:00', '2023-12-31 17:00:00'),
+(1, 3, '2023-01-01 08:00:00', '2023-12-31 17:00:00'),
+(1, 4, '2023-01-01 08:00:00', '2023-12-31 17:00:00'), -- Employee 1 assigned to all departments
+(2, 2, '2023-01-01 08:00:00', '2023-12-31 17:00:00'),
+(4, 3, '2023-06-01 09:00:00', '2023-12-31 18:00:00'),
+(5, 4, '2023-01-01 08:00:00', '2023-12-31 17:00:00'),
+(202, 2, '2023-01-01 08:00:00', '2023-12-31 17:00:00'),
+(3, 3, '2023-06-01 09:00:00', '2023-12-31 18:00:00');
+
 
 INSERT INTO JobPosition (JobID, DepartmentID, JobDescription, PostedDate) VALUES
 (1001, 1, 'Marketing Specialist', '2023-05-01'),
 (1002, 3, 'Junior Engineer', '2023-07-01'),
-(11111, 1, 'Developer', '2011-01-01'); -- For testing Hellen Cole's interview
+(11111, 1, 'Developer', '2011-01-01'), -- For testing Hellen Cole's interview
+(12345, 3, 'Software Engineer', '2023-05-01');
+
 
 INSERT INTO Application (ApplicationID, ApplicantID, JobID, ApplicationDate) VALUES
 (1, 4, 1001, '2023-06-10'),
 (2, 3, 1002, '2023-07-15'),
-(3, 202, 11111, '2023-01-20'); -- Application for job 12345
+(4, 3, 12345, '2023-06-15');; -- Application for job 12345
 
 INSERT INTO Interview (InterviewID, JobID, CandidateID, InterviewTime) VALUES
 (1, 1001, 4, '2023-06-15 10:00:00'),
