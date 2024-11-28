@@ -24,4 +24,4 @@ COPY static/ /app/static/
 EXPOSE 5000 9210
 
 # Start Cloudflared tunnel and Flask application
-CMD ["/bin/bash", "-c", "cloudflared access tcp --hostname mysql.emerginary.com --url 127.0.0.1:9210 & python /app/app.py"]
+CMD ["/bin/bash", "-c", "cloudflared access tcp --hostname mysql1.emerginary.com --url 127.0.0.1:9210 & python /app/app.py"]
