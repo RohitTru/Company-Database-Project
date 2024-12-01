@@ -25,6 +25,9 @@ This project is about taking the foundation we’ve built and extending it into 
 - Password: password
 - DBName: ABC_Company
 
+[Watch Demo Here](https://youtu.be/pB0_LHPj6-8)
+
+
 # DATABASE SCHEMA DOCUMENTATION
 ## EER Diagram
 
