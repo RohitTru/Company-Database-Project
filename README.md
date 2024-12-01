@@ -3,7 +3,7 @@ For Database management we learned how to utilize SQL to query and create databa
 
 # Database Management ABC_Company Final Project
 <div style="text-align: center;">
-## **Problem Description**
+    ## **Problem Description**
 </div>
 This project focuses on designing a database system for ABC Company, a business that manages employees, customers, vendors, and products while streamlining its operations. The goal is to capture everything from employee management and job applications to product sales and vendor relationships, all in one place.
 
