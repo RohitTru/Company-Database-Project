@@ -7,10 +7,12 @@ services:
     expose:
       - "5000"  # Makes port 5000 accessible within the internal Docker network
     restart: unless-stopped
+    environment:
+      MYSQL_HOSTNAME: ${MYSQL_HOSTNAME}  # Fetches the value from .env
 
   cloudflared:
     image: cloudflare/cloudflared:latest
-    command: tunnel --no-autoupdate run --token eyJhIjoiNmVhZmRlYzA5ZjExOGM4OWZhNDNlNmVhOWY1YTllYjkiLCJ0IjoiZTQ2ZjE4NWEtZWQ5NC00M2YwLWE3ZTktOTM4ZjU3ZmE3ZDJmIiwicyI6Ik16SXlOalE0WTJVdFptWTRNaTAwWmpJeUxUZ3dZV0V0WXprNE1HVmhNelV3Tm1ZMiJ9
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}  # Use the token from .env
     depends_on:
       - flask-app  # Ensures the Flask app is started before Cloudflared
     environment:

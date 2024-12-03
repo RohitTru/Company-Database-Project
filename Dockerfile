@@ -23,5 +23,9 @@ COPY static/ /app/static/
 # Expose the ports: Flask (5000) and Cloudflared tunnel (9210)
 EXPOSE 5000 9210
 
+# Set environment variables for Cloudflare token
+ARG CLOUDFLARE_TUNNEL_TOKEN
+ENV CLOUDFLARE_TUNNEL_TOKEN=$CLOUDFLARE_TUNNEL_TOKEN
+
 # Start Cloudflared tunnel and Flask application
-CMD ["/bin/bash", "-c", "cloudflared access tcp --hostname mysql.emerginary.com --url 127.0.0.1:9210 & python /app/app.py"]
+CMD ["/bin/bash", "-c", "cloudflared access tcp --hostname ${MYSQL_HOSTNAME} --url 127.0.0.1:9210 & python /app/app.py"]
